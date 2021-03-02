@@ -75,7 +75,7 @@ class Events
     /**
      * @return string
      */
-    public function getTitre(): string
+    public function getTitre(): ?string
     {
         return $this->titre;
     }
