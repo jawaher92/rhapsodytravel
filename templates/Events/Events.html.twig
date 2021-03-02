@@ -1,0 +1,9 @@
+{% block listEvents %}
+{% if events %}
+{% for event in events %}
+<b>{{ event }}</b>
+{%  endfor %}
+{% else %}
+
+{% endif %}
+{% endblock %}
