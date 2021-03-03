@@ -2,7 +2,6 @@ index:
     path: /
     controller: App\Controller\HomeController::index
 
-
 events_list:
     path: /events/list
     controller: App\Controller\EventsController::index
@@ -10,3 +9,14 @@ events_list:
 create_event:
     path: /events/new
     controller: App\Controller\EventsController::new
+
+event_details:
+    path: /event/{id}/details
+    controller: App\Controller\EventsController::show
+
+event_delete:
+    path: /event/delete/{id}
+    controller: App\Controller\EventsController::delete
+
+
+

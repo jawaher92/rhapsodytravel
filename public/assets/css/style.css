@@ -14,6 +14,23 @@ body {
   font-family: "Open Sans", sans-serif;
 }
 
+#form{
+  display: flex;
+  flex-direction: row;
+  
+}
+
+#form_dateDebut{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+#form_dateFin{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
 a {
   color: #f82249;
   text-decoration: none;

@@ -20,7 +20,7 @@ class HomeController extends  Controller
      * @Method ({"GET", "POST"})
      */
     public function index() {
-        $events= $this->getDoctrine()->getRepository(Events::class)->findAll();
+        $events= $this->getDoctrine()->getRepository(Events::class)->findBy(array(),array('id'=>'DESC'),3,0);
 
         return $this->render('home/index.html.twig', array('events' => $events));
     }

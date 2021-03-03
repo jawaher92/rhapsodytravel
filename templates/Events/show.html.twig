@@ -1,12 +1,10 @@
-<a href="/" class="nav-link">Retour à l'accueil</a>
+{% extends 'simpleTemplate.html.twig' %}
+{% block detailsevent %}
+<a href="/events/list" class="nav-link">Retour</a>
 
-{% extends 'base.html.twig' %}
-
-{% block title %}{{ article.titre }}{% endblock %}
-
-{% block body %}
-    <h1>{{ article.titre }}</h1>
-    <p>{{ article.description }}</p>
+    <h1>{{ event.titre }}</h1>
+    <h2>{{  event.lieu}}</h2>
+    <h3>{{ event.dateDebut |date('d-m-Y') }} - {{ event.dateFin|date('d-m-Y') }}</h3>
+    <p>{{ event.description }}</p>
     <hr>
-    <a href="/">Retour</a>
 {% endblock %}

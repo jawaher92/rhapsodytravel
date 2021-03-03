@@ -1,8 +1,12 @@
-<a href="/" class="nav-link">Retour à l'accueil</a>
+{% extends 'simpleTemplate.html.twig' %}
 
-{% block title %}Nouvel Evènement{% endblock %}
 
-{% block body %}
+
+{% block newEvent %}
+
+    <a href="/" class="nav-link">Retour à l'accueil</a>
+    {% block title %}Nouvel Evènement{% endblock %}
+
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_end(form) }}

@@ -52,12 +52,21 @@ class EventsController extends  Controller
 
         $form = $this->createFormBuilder($event)
             ->add('titre', TextType::class, array(
-                'required' => false,
+                'required' => true,
                 'attr' => array('class' => 'form-control')
             ))
-            ->add('description', TextareaType::class)
-            ->add('dateDebut', DateTimeType::class)
-            ->add('dateFin', DateTimeType::class)
+            ->add('description', TextareaType::class, array(
+                'required' => true,
+                'attr' => array('class' => 'form-control')
+            ))
+            ->add('dateDebut', DateTimeType::class, array(
+                'required' => true,
+                'attr' => array('class' => 'form-control')
+            ))
+            ->add('dateFin', DateTimeType::class, array(
+                'required' => true,
+                'attr' => array('class' => 'form-control')
+            ))
 
             ->add('save', SubmitType::class, array(
                 'label' => 'Ajouter',
@@ -74,7 +83,7 @@ class EventsController extends  Controller
             $entityManager->persist($event);
             $entityManager->flush();
 
-            return $this->redirectToRoute('event_list');
+            return $this->redirectToRoute('events_list');
         }
 
         return $this->render('Events/new.html.twig', array(
@@ -97,7 +106,7 @@ class EventsController extends  Controller
                 'attr' => array('class' => 'form-control')
             ))
             ->add('save', SubmitType::class, array(
-                'label' => 'Update',
+                'label' => 'Valider',
                 'attr' => array('class' => 'btn btn-primary mt-3')
             ))
             ->getForm();
@@ -109,21 +118,21 @@ class EventsController extends  Controller
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
-            return $this->redirectToRoute('event_list');
+            return $this->redirectToRoute('events_list');
         }
 
-        return $this->render('events/edit.html.twig', array(
+        return $this->render('Events/edit.html.twig', array(
             'form' => $form->createView()
         ));
     }
 
     /**
-     * @Route("/event/{id}", name="event_show")
+     * @Route("/event/{id}/details", name="event_details")
      */
     public function show($id) {
-        $event = $this->getDoctrine()->getRepository(event::class)->find($id);
+        $event = $this->getDoctrine()->getRepository(Events::class)->find($id);
 
-        return $this->render('events/show.html.twig', array('event' => $event));
+        return $this->render('Events/show.html.twig', array('event' => $event));
     }
 
     /**
@@ -131,14 +140,13 @@ class EventsController extends  Controller
      * @Method({"DELETE"})
      */
     public function delete(Request $request, $id) {
-        $event = $this->getDoctrine()->getRepository(event::class)->find($id);
+        $event = $this->getDoctrine()->getRepository(Events::class)->find($id);
 
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($event);
         $entityManager->flush();
 
         $events= $this->getDoctrine()->getRepository(Events::class)->findAll();
-
         return $this->render('Events/events.html.twig', array('events' => $events));
 
     }
