@@ -123,7 +123,7 @@ class Events
     /**
      * @return \DateTime
      */
-    public function getDateDebut(): \DateTime
+    public function getDateDebut(): ?\DateTime
     {
         return $this->dateDebut;
     }
@@ -139,7 +139,7 @@ class Events
     /**
      * @return \DateTime
      */
-    public function getDateFin(): \DateTime
+    public function getDateFin(): ?\DateTime
     {
         return $this->dateFin;
     }

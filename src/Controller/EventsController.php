@@ -5,7 +5,7 @@ namespace App\Controller;
 
 
 use App\Entity\Events;
-use Doctrine\DBAL\Types\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,18 +26,25 @@ use Symfony\Component\Validator\Constraints\Date;
 class EventsController extends  Controller
 {
 
+
+
+
     /**
-     * @Route ("/")
+     * @Route ("/events/list")
      * @Method ({"GET", "POST"})
      */
-    public function index() {
+    public function eventsList() {
 
         $events= $this->getDoctrine()->getRepository(Events::class)->findAll();
 
-        return $this->render('home/index.html.twig', array('events' => $events));
+        return $this->render('Events/events.html.twig', array('events' => $events));
     }
+
+
+
+
     /**
-     * @Route("/event/new", name="new_event")
+     * @Route("/events/new", name="create_event")
      * Method({"GET", "POST"})
      */
     public function new(Request $request) {
@@ -130,8 +137,10 @@ class EventsController extends  Controller
         $entityManager->remove($event);
         $entityManager->flush();
 
-        $response = new Response();
-        $response->send();
+        $events= $this->getDoctrine()->getRepository(Events::class)->findAll();
+
+        return $this->render('Events/events.html.twig', array('events' => $events));
+
     }
 
 

@@ -1,3 +1,12 @@
 index:
     path: /
     controller: App\Controller\HomeController::index
+
+
+events_list:
+    path: /events/list
+    controller: App\Controller\EventsController::index
+
+create_event:
+    path: /events/new
+    controller: App\Controller\EventsController::new
