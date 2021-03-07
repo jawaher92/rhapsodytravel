@@ -4,7 +4,7 @@
 namespace App\Controller;
 
 
-use App\Entity\Events;
+use App\Entity\Event\Events;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\Response;

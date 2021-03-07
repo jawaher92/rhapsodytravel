@@ -2,155 +2,117 @@
 
 namespace App\Entity;
 
+use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * User
- *
- * @ORM\Table(name="user")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-class User
+class User implements UserInterface
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="nom", type="string", length=50, nullable=true)
-     */
-    private $nom;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="prenom", type="string", length=50, nullable=true)
-     */
-    private $prenom;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="numtel", type="string", length=10, nullable=true)
+     * @ORM\Column(type="json")
      */
-    private $numtel;
+    private $roles = [];
 
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="comptetype", type="integer", nullable=true)
+     * @var string The hashed password
+     * @ORM\Column(type="string")
      */
-    private $comptetype;
+    private $password;
 
-    /**
-     * @return int
-     */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getNom(): ?string
-    {
-        return $this->nom;
-    }
-
-    /**
-     * @param string|null $nom
-     */
-    public function setNom(?string $nom): void
-    {
-        $this->nom = $nom;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPrenom(): ?string
-    {
-        return $this->prenom;
-    }
-
-    /**
-     * @param string|null $prenom
-     */
-    public function setPrenom(?string $prenom): void
-    {
-        $this->prenom = $prenom;
-    }
-
-    /**
-     * @return string|null
-     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    /**
-     * @param string|null $email
-     */
-    public function setEmail(?string $email): void
+    public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
     }
 
     /**
-     * @return string|null
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
      */
-    public function getNumtel(): ?string
+    public function getUsername(): string
     {
-        return $this->numtel;
+        return (string) $this->email;
     }
 
     /**
-     * @param string|null $numtel
+     * @see UserInterface
      */
-    public function setNumtel(?string $numtel): void
+    public function getRoles(): array
     {
-        $this->numtel = $numtel;
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles)
+    {
+         $this->roles = $roles;
+
+         return $this;
+
     }
 
     /**
-     * @return int|null
+     * @see UserInterface
      */
-    public function getComptetype(): ?int
+    public function getPassword(): string
     {
-        return $this->comptetype;
+        return (string) $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
     }
 
     /**
-     * @param int|null $comptetype
+     * Returning a salt is only needed, if you are not using a modern
+     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
+     *
+     * @see UserInterface
      */
-    public function setComptetype(?int $comptetype): void
+    public function getSalt(): ?string
     {
-        $this->comptetype = $comptetype;
+        return null;
     }
 
-
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
 }

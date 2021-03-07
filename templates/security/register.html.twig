@@ -1,15 +1,13 @@
-{% if is_granted('ROLE_ADMIN') %}
-
 {% extends 'simpleTemplate.html.twig' %}
 
 
-{% block newEvent %}
+
+{% block register %}
 
     <a href="/" class="nav-link">Retour à l'accueil</a>
-    {% block title %}Nouvel Evènement{% endblock %}
+    {% block title %}Nouvel Utilisateur{% endblock %}
 
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_end(form) }}
 {% endblock %}
-{% endif %}

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Event;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -38,6 +38,13 @@ class ReservationsEvents
     /**
      * @var int
      *
+     * @ORM\Column(name="id_event", type="integer", nullable=false)
+     */
+    private $idEvent;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="nbre_personnes", type="integer", nullable=false)
      */
     private $nbrePersonnes;
@@ -48,16 +55,6 @@ class ReservationsEvents
      * @ORM\Column(name="etat", type="integer", nullable=false)
      */
     private $etat;
-
-    /**
-     * @var \Events
-     *
-     * @ORM\ManyToOne(targetEntity="Events")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_event", referencedColumnName="id")
-     * })
-     */
-    private $idEvent;
 
     /**
      * @return int
@@ -110,6 +107,22 @@ class ReservationsEvents
     /**
      * @return int
      */
+    public function getIdEvent(): int
+    {
+        return $this->idEvent;
+    }
+
+    /**
+     * @param int $idEvent
+     */
+    public function setIdEvent(int $idEvent): void
+    {
+        $this->idEvent = $idEvent;
+    }
+
+    /**
+     * @return int
+     */
     public function getNbrePersonnes(): int
     {
         return $this->nbrePersonnes;
@@ -139,21 +152,7 @@ class ReservationsEvents
         $this->etat = $etat;
     }
 
-    /**
-     * @return \Events
-     */
-    public function getIdEvent(): \Events
-    {
-        return $this->idEvent;
-    }
 
-    /**
-     * @param \Events $idEvent
-     */
-    public function setIdEvent(\Events $idEvent): void
-    {
-        $this->idEvent = $idEvent;
-    }
 
 
 }

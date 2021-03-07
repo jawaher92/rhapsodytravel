@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Event;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -75,7 +75,7 @@ class Events
     /**
      * @return string
      */
-    public function getTitre(): ?string
+    public function getTitre(): string
     {
         return $this->titre;
     }
@@ -123,7 +123,7 @@ class Events
     /**
      * @return \DateTime
      */
-    public function getDateDebut(): ?\DateTime
+    public function getDateDebut(): \DateTime
     {
         return $this->dateDebut;
     }
@@ -139,7 +139,7 @@ class Events
     /**
      * @return \DateTime
      */
-    public function getDateFin(): ?\DateTime
+    public function getDateFin(): \DateTime
     {
         return $this->dateFin;
     }
@@ -151,6 +151,7 @@ class Events
     {
         $this->dateFin = $dateFin;
     }
+
 
 
 }

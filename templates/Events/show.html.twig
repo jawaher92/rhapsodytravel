@@ -1,3 +1,4 @@
+
 {% extends 'simpleTemplate.html.twig' %}
 {% block detailsevent %}
 <a href="/events/list" class="nav-link">Retour</a>
@@ -7,4 +8,7 @@
     <h3>{{ event.dateDebut |date('d-m-Y') }} - {{ event.dateFin|date('d-m-Y') }}</h3>
     <p>{{ event.description }}</p>
     <hr>
+    {% if is_granted('ROLE_CLIENT') %}
+        réserver
+{% endif %}
 {% endblock %}

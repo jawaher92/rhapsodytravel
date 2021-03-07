@@ -2,6 +2,11 @@ index:
     path: /
     controller: App\Controller\HomeController::index
 
+
+register:
+    path: /register
+    controller: App\Controller\SecurityController::register
+
 events_list:
     path: /events/list
     controller: App\Controller\EventsController::index

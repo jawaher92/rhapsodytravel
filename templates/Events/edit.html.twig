@@ -1,3 +1,5 @@
+{% if is_granted('ROLE_ADMIN') %}
+
 {% extends 'simpleTemplate.html.twig' %}
 {% block title %}Mise à Jour{% endblock %}
 
@@ -6,3 +8,4 @@
     {{ form_widget(form) }}
     {{ form_end(form) }}
 {% endblock %}
+{% endif %}

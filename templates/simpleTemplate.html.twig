@@ -45,6 +45,8 @@
         <div class="container" data-aos="fade-up">
 
             <div class="row" data-aos="fade-up" data-aos-delay="100">
+                {% block register %} {% endblock %}
+                {% block login %} {% endblock %}
                 {% block newEvent %} {% endblock %}
                 {% block editevent %}{% endblock %}
                 {% block events %}
@@ -61,10 +63,10 @@
     <!-- ======= Supporters Section ======= -->
 
     <!-- =======  F.A.Q Section ======= -->
+    {% block reservations %}
     <section id="faq">
 
         <div class="container" data-aos="fade-up">
-            {% block reservations %}{% endblock %}
 
             <div class="section-header">
                 <h2>F.A.Q </h2>
@@ -137,7 +139,7 @@
         </div>
 
     </section><!-- End  F.A.Q Section -->
-
+{% endblock %}
     <!-- ======= Subscribe Section ======= -->
 
     <!-- ======= Buy Ticket Section ======= -->

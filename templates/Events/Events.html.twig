@@ -1,6 +1,8 @@
 {% extends 'simpleTemplate.html.twig' %}
 {% block events %}
-    <a href="/" class="nav-link">Retour à l'accueil</a>    <a href="/events/new" class="nav-link">Ajouter un évenement</a>
+    <a href="/" class="nav-link">Retour à l'accueil</a>
+    {% if is_granted('ROLE_ADMIN') %}
+    <a href="/events/new" class="nav-link">Ajouter un évenement</a> {% endif %}
     <div class="section-header">
         <h2>Evenements</h2>
     </div>
@@ -17,9 +19,11 @@
                         <p>{{ event.lieu }}</p>
                 <div class="stars">
                     <a href="/event/{{ event.id }}/details"  style="color: white" class="btn btn-dark">+Détails</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+
                     <a href="/event/edit/{{ event.id }}" class="btn btn-light">Modifier</a>
                     <a href="/event/delete/{{ event.id }}" style="color: white" class="btn btn-danger delete-event" onclick="return confirm('Voulez-vous continuer?')">Supprimer</a>
-
+{% endif %}
                 </div>
 
             </div>

@@ -5,7 +5,7 @@ namespace App\Controller;
 
 
 
-use App\Entity\Events;
+use App\Entity\Event\Events;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,6 +20,7 @@ class HomeController extends  Controller
      * @Method ({"GET", "POST"})
      */
     public function index() {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $events= $this->getDoctrine()->getRepository(Events::class)->findBy(array(),array('id'=>'DESC'),3,0);
 
         return $this->render('home/index.html.twig', array('events' => $events));
