@@ -5,19 +5,24 @@ namespace App\Controller;
 
 
 use App\Entity\Event\Events;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
+
 
 /**
  * @ORM\Entity
@@ -25,8 +30,6 @@ use Symfony\Component\Validator\Constraints\Date;
  */
 class EventsController extends  Controller
 {
-
-
 
 
     /**
@@ -66,8 +69,35 @@ class EventsController extends  Controller
             ->add('dateFin', DateTimeType::class, array(
                 'required' => true,
                 'attr' => array('class' => 'form-control')
-            ))
 
+            ))            ->add('prix_unite', NumberType::class, array(
+                'label' => 'prix unitaire',  'required' => true,
+                'attr' => array('class' => 'form-control')
+
+            ))
+            ->add('brochure', FileType::class, [
+                'label' => 'Brochure',
+
+                // unmapped means that this field is not associated to any entity property
+                'mapped' => false,
+
+                // make it optional so you don't have to re-upload the PDF file
+                // every time you edit the Product details
+                'required' => false,
+
+                // unmapped fields can't define their validation using annotations
+                // in the associated entity, so you can use the PHP constraint classes
+                'constraints' => [
+                    new File([
+                        'maxSize' => '1024k',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid image',
+                    ])
+                ],
+            ])
             ->add('save', SubmitType::class, array(
                 'label' => 'Ajouter',
                 'attr' => array('class' => 'btn btn-primary mt-3')
@@ -78,6 +108,30 @@ class EventsController extends  Controller
 
         if($form->isSubmitted() && $form->isValid()) {
             $event = $form->getData();
+            $brochureFile = $form->get('brochure')->getData();
+
+            // this condition is needed because the 'brochure' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($brochureFile) {
+                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $brochureFile->move(
+                        $this->getParameter('brochures_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+                $event->setBrochureFilename($newFilename);
+            }
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($event);
@@ -96,15 +150,56 @@ class EventsController extends  Controller
      * Method({"GET", "POST"})
      */
     public function edit(Request $request, $id) {
-        $event = new Events();
-        $event = $this->getDoctrine()->getRepository(Events::class)->find($id);
 
-        $form = $this->createFormBuilder($event)
-            ->add('titre', TextType::class, array('attr' => array('class' => 'form-control')))
-            ->add('description', TextareaType::class, array(
-                'required' => false,
-                'attr' => array('class' => 'form-control')
-            ))
+          $event = $this->getDoctrine()->getRepository(Events::class)->find($id);
+        $event->setBrochureFilename(
+            $this->getParameter('brochures_directory').'/'.$event->getBrochureFilename()
+        );
+          $form = $this->createFormBuilder($event)
+              ->add('titre', TextType::class, array(
+                  'required' => true,
+                  'attr' => array('class' => 'form-control')
+              ))
+              ->add('description', TextareaType::class, array(
+                  'required' => true,
+                  'attr' => array('class' => 'form-control')
+              ))
+              ->add('dateDebut', DateTimeType::class, array(
+                  'required' => true,
+                  'attr' => array('class' => 'form-control')
+              ))
+              ->add('dateFin', DateTimeType::class, array(
+                  'required' => true,
+                  'attr' => array('class' => 'form-control')
+
+              ))            ->add('prix_unite', NumberType::class, array(
+                  'label' => 'prix unitaire',  'required' => true,
+                  'attr' => array('class' => 'form-control')
+
+              ))
+              ->add('brochure', FileType::class, [
+                  'label' => 'Brochure',
+
+                  // unmapped means that this field is not associated to any entity property
+                  'mapped' => false,
+
+                  // make it optional so you don't have to re-upload the PDF file
+                  // every time you edit the Product details
+                  'required' => false,
+
+                  // unmapped fields can't define their validation using annotations
+                  // in the associated entity, so you can use the PHP constraint classes
+                  'constraints' => [
+                      new File([
+                          'maxSize' => '1024k',
+                          'mimeTypes' => [
+                              'image/jpeg',
+                              'image/png',
+                          ],
+                          'mimeTypesMessage' => 'Please upload a valid image',
+                      ])
+                  ],
+              ])
             ->add('save', SubmitType::class, array(
                 'label' => 'Valider',
                 'attr' => array('class' => 'btn btn-primary mt-3')
@@ -114,7 +209,30 @@ class EventsController extends  Controller
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
+            $brochureFile = $form->get('brochure')->getData();
 
+            // this condition is needed because the 'brochure' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($brochureFile) {
+                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $brochureFile->move(
+                        $this->getParameter('brochures_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+                $event->setBrochureFilename($newFilename);
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
@@ -152,6 +270,13 @@ class EventsController extends  Controller
     }
 
 
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => Events::class,
+        ]);
+    }
 
 
 

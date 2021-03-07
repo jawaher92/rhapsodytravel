@@ -57,6 +57,13 @@ class Events
     private $dateFin;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="prix_unite", type="integer", nullable=false)
+     */
+    private $prixUnite;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -75,7 +82,7 @@ class Events
     /**
      * @return string
      */
-    public function getTitre(): string
+    public function getTitre(): ?string
     {
         return $this->titre;
     }
@@ -123,7 +130,7 @@ class Events
     /**
      * @return \DateTime
      */
-    public function getDateDebut(): \DateTime
+    public function getDateDebut(): ?\DateTime
     {
         return $this->dateDebut;
     }
@@ -139,7 +146,7 @@ class Events
     /**
      * @return \DateTime
      */
-    public function getDateFin(): \DateTime
+    public function getDateFin(): ?\DateTime
     {
         return $this->dateFin;
     }
@@ -152,6 +159,37 @@ class Events
         $this->dateFin = $dateFin;
     }
 
+    /**
+     * @return int
+     */
+    public function getPrixUnite(): ?int
+    {
+        return $this->prixUnite;
+    }
 
+    /**
+     * @param int $prixUnite
+     */
+    public function setPrixUnite(int $prixUnite): void
+    {
+        $this->prixUnite = $prixUnite;
+    }
+
+    /**
+     * @ORM\Column(name="brochure_filename", type="string")
+     */
+    private $brochureFilename;
+
+    public function getBrochureFilename()
+    {
+        return $this->brochureFilename;
+    }
+
+    public function setBrochureFilename($brochureFilename)
+    {
+        $this->brochureFilename = $brochureFilename;
+
+        return $this;
+    }
 
 }

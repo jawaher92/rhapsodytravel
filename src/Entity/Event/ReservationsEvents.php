@@ -57,6 +57,13 @@ class ReservationsEvents
     private $etat;
 
     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="prix_total", type="integer", nullable=true)
+     */
+    private $prixTotal;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -152,7 +159,20 @@ class ReservationsEvents
         $this->etat = $etat;
     }
 
+    /**
+     * @return int|null
+     */
+    public function getPrixTotal(): ?int
+    {
+        return $this->prixTotal;
+    }
 
-
+    /**
+     * @param int|null $prixTotal
+     */
+    public function setPrixTotal(?int $prixTotal): void
+    {
+        $this->prixTotal = $prixTotal;
+    }
 
 }
